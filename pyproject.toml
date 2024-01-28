@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools_scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tagbiljett"
+description = "A command-line tool for querying SJ ticket prices"
+readme = {file = "README.md", content-type = "text/markdown"}
+authors = [{name = "Jonas Windhager", email = "jonas@windhager.io"}]
+license = {file = "LICENSE"}
+requires-python = ">=3.9"
+dependencies = [
+    "click",
+    "pandas",
+    "requests",
+]
+dynamic = ["version"]
+
+[project.scripts]
+tagbiljett = "tagbiljett.__main__:cli"
+
+[tool.ruff]
+extend-select = ["I"]
+
+[tool.setuptools_scm]
