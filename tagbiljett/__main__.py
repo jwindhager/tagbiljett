@@ -48,27 +48,30 @@ def cli(
     arrival_date_time: Optional[datetime],
     num_changes: Optional[int],
 ) -> None:
-    cookies = get_session()
-    locations = get_locations(cookies)
-    departure_location_id = find_location_id(locations, departure_location_name)
-    arrival_location_id = find_location_id(locations, arrival_location_name)
-    timetable_token, pricing_token = post_standard_search(
-        departure_date_time,
-        departure_location_id,
-        arrival_location_id,
-        cookies,
-    )
-    timetable = get_search_results(timetable_token, cookies)
-    journey_token = find_journey(
-        timetable,
-        departure_date_time,
-        arrival_date_time=arrival_date_time,
-        num_changes=num_changes,
-    )
-    price_data = get_price_data(pricing_token, journey_token, cookies)
-    prices = find_prices(price_data["salesCategoryPrice"])
-    for category, amount_or_status in prices.items():
-        click.echo(f"{category}\t{amount_or_status}")
+    try:
+        cookies = get_session()
+        locations = get_locations(cookies)
+        departure_location_id = find_location_id(locations, departure_location_name)
+        arrival_location_id = find_location_id(locations, arrival_location_name)
+        timetable_token, pricing_token = post_standard_search(
+            departure_date_time,
+            departure_location_id,
+            arrival_location_id,
+            cookies,
+        )
+        timetable = get_search_results(timetable_token, cookies)
+        journey_token = find_journey(
+            timetable,
+            departure_date_time,
+            arrival_date_time=arrival_date_time,
+            num_changes=num_changes,
+        )
+        price_data = get_price_data(pricing_token, journey_token, cookies)
+        prices = find_prices(price_data["salesCategoryPrice"])
+        for category, amount_or_status in prices.items():
+            click.echo(f"{category}\t{amount_or_status}")
+    except Exception as e:
+        raise click.ClickException(str(e))
 
 
 if __name__ == "__main__":
