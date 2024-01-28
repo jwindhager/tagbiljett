@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 trains_file="$1"  # A headerless CSV file containing tagbiljett arguments
 prices_file="$2"  # A file to store the prices in (generated automatically)

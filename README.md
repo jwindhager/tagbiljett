@@ -44,7 +44,7 @@ Options:
 ```
 
 ```
-> docker run -v $PWD/trains.csv:/usr/src/app/trains.csv --entrypoint /bin/sh ghcr.io/jwindhager/tagbiljett cron.sh trains.csv prices.txt
+> docker run -v $PWD/trains.csv:/usr/src/app/trains.csv --entrypoint /bin/bash ghcr.io/jwindhager/tagbiljett cron.sh trains.csv prices.txt
 ```
 
 ## Contributing
