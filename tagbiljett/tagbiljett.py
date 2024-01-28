@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 import pandas as pd
 import requests
@@ -37,11 +37,11 @@ def get_locations(cookies: dict[str, str]) -> pd.DataFrame:
 
 def find_location_id(locations: pd.DataFrame, location_name: str) -> str:
     locations = locations[locations["name"] == location_name]
-    if locations.empty:
+    if len(locations.index) == 0:
         raise ValueError(f"Location '{location_name}' not found")
     if len(locations.index) > 1:
         raise ValueError(f"Multiple locations found for '{location_name}'")
-    location_id: str = locations.iloc[0]["id"]
+    location_id = str(locations.iloc[0]["id"])
     return location_id
 
 
@@ -104,11 +104,11 @@ def find_journey(
         timetable = timetable[timetable["arrival_time"] == arrival_time]
     if num_changes is not None:
         timetable = timetable[timetable["num_changes"] == num_changes]
-    if timetable.empty:
+    if len(timetable.index) == 0:
         raise ValueError("No matching trains found")
     if len(timetable) > 1:
         raise ValueError("Multiple matching trains found")
-    journey_token: str = timetable.iloc[0]["journey_token"]
+    journey_token = str(timetable.iloc[0]["journey_token"])
     return journey_token
 
 
@@ -122,15 +122,24 @@ def get_price_data(
     return price_data
 
 
-def find_prices(price_data: dict[str, Any], _category: str = "") -> dict[str, float]:
+def find_prices(
+    price_data: Union[list[Any], dict[str, Any]], _category: str = ""
+) -> dict[str, Union[str, float]]:
+    if isinstance(price_data, list):
+        prices = {}
+        for i, item in enumerate(price_data):
+            prices.update(find_prices(item, _category=f"{_category}/{i}"))
+        return prices
+    journey_price_description = price_data.get("journeyPriceDescription")
+    if isinstance(journey_price_description, dict):
+        if journey_price_description.get("soldOut", False):
+            return {_category: "sold out"}
+        total_price = journey_price_description.get("totalPrice")
+        if isinstance(total_price, dict) and "amount" in total_price:
+            return {_category: total_price["amount"]}
+        return {_category: "total price unknown"}
     prices = {}
     for key, item in price_data.items():
-        if key == "totalPrice":
-            prices[_category] = item["amount"]
-        elif isinstance(item, dict):
-            if key in ("journeyPriceDescription",):
-                child_category = _category
-            else:
-                child_category = f"{_category}/{key}"
-            prices.update(find_prices(item, _category=child_category))
+        if isinstance(item, (list, dict)):
+            prices.update(find_prices(item, _category=f"{_category}/{key}"))
     return prices

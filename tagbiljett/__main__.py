@@ -67,8 +67,8 @@ def cli(
     )
     price_data = get_price_data(pricing_token, journey_token, cookies)
     prices = find_prices(price_data["salesCategoryPrice"])
-    for category, amount in prices.items():
-        click.echo(f"{category}\t{amount:.2f}")
+    for category, amount_or_status in prices.items():
+        click.echo(f"{category}\t{amount_or_status}")
 
 
 if __name__ == "__main__":
