@@ -1,4 +1,4 @@
-# Tagbiljett
+# tagbiljett
 
 A command-line tool for querying SJ ticket prices
 
