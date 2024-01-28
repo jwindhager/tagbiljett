@@ -21,8 +21,8 @@ from tagbiljett.tagbiljett import (
 )
 @click.argument(
     "departure_date_time",
-    metavar="'YYYY-MM-DD HH:MM'",
-    type=click.DateTime(formats=[r"%Y-%m-%d %H:%M"]),
+    metavar=r"%Y-%m-%dT%H:%M",
+    type=click.DateTime(formats=[r"%Y-%m-%dT%H:%M"]),
 )
 @click.argument("departure_location_name", metavar="FROM", type=str)
 @click.argument("arrival_location_name", metavar="TO", type=str)
@@ -30,7 +30,8 @@ from tagbiljett.tagbiljett import (
     "-a",
     "--arrival",
     "arrival_date_time",
-    type=click.DateTime(formats=[r"%Y-%m-%d %H:%M"]),
+    metavar=r"%Y-%m-%dT%H:%M",
+    type=click.DateTime(formats=[r"%Y-%m-%dT%H:%M"]),
     help="Arrival date and time.",
 )
 @click.option(
