@@ -15,7 +15,7 @@ pip install tagbiljett
 ```
 > tagbiljett --help
 
-Usage: tagbiljett [OPTIONS] [%Y-%m-%d %H:%M] FROM TO
+Usage: tagbiljett [OPTIONS] 'YYYY-MM-DD HH:MM' FROM TO
 
   Query current SJ ticket prices for a given journey
 

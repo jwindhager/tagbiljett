@@ -19,7 +19,11 @@ from tagbiljett.tagbiljett import (
     context_settings={"help_option_names": ["-h", "--help"]},
     help="Query current SJ ticket prices for a given journey",
 )
-@click.argument("departure_date_time", type=click.DateTime(formats=[r"%Y-%m-%d %H:%M"]))
+@click.argument(
+    "departure_date_time",
+    metavar="'YYYY-MM-DD HH:MM'",
+    type=click.DateTime(formats=[r"%Y-%m-%d %H:%M"]),
+)
 @click.argument("departure_location_name", metavar="FROM", type=str)
 @click.argument("arrival_location_name", metavar="TO", type=str)
 @click.option(
