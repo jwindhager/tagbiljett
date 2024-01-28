@@ -1,0 +1,27 @@
+name: build-and-publish
+on:
+  push:
+    tags:
+      - v*
+jobs:
+  build-and-publish:
+    name: Build and publish
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/tagbiljett
+    permissions:
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Install pypa/build
+        run: python3 -m pip install --user build
+      - name: Build Python package
+        run: python3 -m build
+      - name: Publish Python package
+        uses: pypa/gh-action-pypi-publish@release/v1
