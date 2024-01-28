@@ -2,7 +2,7 @@ name: GHCR
 on:
   push:
     branches:
-      - $default-branch
+      - main
     tags:
       - v*
 jobs:
